@@ -16,12 +16,20 @@ class InstallData implements InstallDataInterface
     protected $sampleDataContext;
     protected $storeView;
     protected $categoryCollection;
+    private $state;
 
 
     public function __construct(\Magento\Framework\Setup\SampleData\Context $sampleDataContext,
                                 \Magento\Store\Model\Store $storeView,
-                                \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollection)
+                                \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollection,
+                                \Magento\Framework\App\State $state)
     {
+        try{
+            $state->setAreaCode('adminhtml');
+        }
+        catch(\Magento\Framework\Exception\LocalizedException $e){
+            // left empty
+        }
 
         $this->config = require 'Config.php';
         $this->fixtureManager = $sampleDataContext->getFixtureManager();
