@@ -22,7 +22,8 @@ class InstallData implements InstallDataInterface
     public function __construct(\Magento\Framework\Setup\SampleData\Context $sampleDataContext,
                                 \Magento\Store\Model\Store $storeView,
                                 \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollection,
-                                \Magento\Framework\App\State $state)
+                                \Magento\Framework\App\State $state,
+                                \Magento\Indexer\Model\Processor $index)
     {
         try{
             $state->setAreaCode('adminhtml');
@@ -36,10 +37,15 @@ class InstallData implements InstallDataInterface
         $this->csvReader = $sampleDataContext->getCsvReader();
         $this->storeView = $storeView;
         $this->categoryCollection = $categoryCollection;
+
+        $this->index = $index;
     }
 
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
+        //Need to reindex to make sure the 2nd store index tables exist before saving products.
+        $this->index->reindexAll();
+
         //get view id from view code
         $_viewId = $this->storeView->load($this->config['viewCode'])->getStoreId();
 
