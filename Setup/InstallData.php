@@ -44,7 +44,7 @@ class InstallData implements InstallDataInterface
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         //Need to reindex to make sure the 2nd store index tables exist before saving products.
-        $this->index->reindexAll();
+        //$this->index->reindexAll();
 
         //get view id from view code
         $_viewId = $this->storeView->load($this->config['viewCode'])->getStoreId();
