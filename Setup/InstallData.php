@@ -2,10 +2,15 @@
 
 namespace MagentoEse\LumaDECategories\Setup;
 
+use Magento\Framework\App\State;
+use Magento\Framework\File\Csv;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-
+use Magento\Framework\Setup\SampleData\Context;
+use Magento\Framework\Setup\SampleData\FixtureManager;
+use Magento\Indexer\Model\Processor;
+use Magento\Store\Model\Store;
 
     /**
  * @codeCoverageIgnore
@@ -13,12 +18,58 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class InstallData implements InstallDataInterface
 {
 
+    /**
+     * 
+     * @var \Magento\Framework\Setup\SampleData\Context
+     */
     protected $sampleDataContext;
+
+    /**
+     * 
+     * @var Store
+     */
     protected $storeView;
+
+    /**
+     * 
+     * @var Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     */
     protected $categoryCollection;
-    private $state;
+
+    /**
+     * 
+     * @var array
+     */
+    protected $config;
+
+    /**
+     * 
+     * @var FixtureManager
+     */
+    protected $fixtureManager;
+
+    /**
+     * 
+     * @var Csv
+     */
+    protected $csvReader;
+
+    /**
+     * 
+     * @var Processor
+     */
+    protected $index;
 
 
+    /**
+     * 
+     * @param Context $sampleDataContext 
+     * @param Store $storeView 
+     * @param Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollection 
+     * @param State $state 
+     * @param Processor $index 
+     * @return void 
+     */
     public function __construct(\Magento\Framework\Setup\SampleData\Context $sampleDataContext,
                                 \Magento\Store\Model\Store $storeView,
                                 \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollection,
@@ -37,7 +88,6 @@ class InstallData implements InstallDataInterface
         $this->csvReader = $sampleDataContext->getCsvReader();
         $this->storeView = $storeView;
         $this->categoryCollection = $categoryCollection;
-
         $this->index = $index;
     }
 
